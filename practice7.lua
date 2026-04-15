@@ -22,25 +22,22 @@ local ValidKeys = {
         expires = "2026-12-31",
         type = "Vitalício"
     },
-    -- Keys para clientes (adicione aqui as keys que você vender)
+    -- Keys para clientes
     ["COMPRADOR1-2024"] = {
         user = "João",
         expires = "2025-06-30",
         type = "Mensal"
     },
-    -- Exemplo de key mensal
     ["MENSAL-001-2025"] = {
         user = "Cliente Mensal",
         expires = "2025-05-15",
         type = "Mensal"
     },
-    -- Exemplo de key trimestral
     ["TRIMESTRAL-001-2025"] = {
         user = "Cliente Trimestral",
         expires = "2025-07-15",
         type = "Trimestral"
     },
-    -- Exemplo de key anual
     ["ANUAL-001-2025"] = {
         user = "Cliente Anual",
         expires = "2026-04-15",
@@ -237,7 +234,8 @@ local function CreateKeyUI()
             wait(0.5)
             ScreenGui:Destroy()
             
-            -- Carregar o cheat
+            -- Carregar o cheat (com delay para garantir)
+            task.wait(0.5)
             LoadCheat()
         else
             StatusLabel.Text = "❌ " .. message
@@ -263,17 +261,6 @@ local function LoadCheat()
     print("═══════════════════════════════════════")
     print("     🎯 PRACTICE7 CHEAT CARREGADO 🎯     ")
     print("═══════════════════════════════════════")
-    print("⚡ Funcionalidades:")
-    print("   • Aimbot Perfeito")
-    print("   • Voo (Fly)")
-    print("   • ESP Wallhack")
-    print("   • Anti AFK")
-    print("   • Super Velocidade")
-    print("═══════════════════════════════════════")
-    print("💎 Criado por Nathan goat aura farmer")
-    print("═══════════════════════════════════════")
-    
-    wait(1)
     
     -- Serviços
     local UserInputService = game:GetService("UserInputService")
@@ -283,7 +270,8 @@ local function LoadCheat()
     local Mouse = Player:GetMouse()
     local Camera = workspace.CurrentCamera
     
-    wait(0.5)
+    -- Aguardar personagem
+    repeat task.wait() until Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
     
     -- Configurações
     local Settings = {
@@ -291,7 +279,6 @@ local function LoadCheat()
         Fly = false,
         ESP = false,
         Speed = false,
-        AntiAfk = false,
         FlySpeed = 75,
         WalkSpeed = 55,
         AimbotKey = Enum.KeyCode.K,
@@ -351,12 +338,12 @@ local function LoadCheat()
     Title.Parent = TitleFrame
     
     -- Animação RGB
-    spawn(function()
+    task.spawn(function()
         while ScreenGui and ScreenGui.Parent do
             for hue = 0, 1, 0.02 do
                 if not ScreenGui.Parent then break end
                 Title.TextColor3 = Color3.fromHSV(hue, 1, 1)
-                wait(0.03)
+                task.wait(0.03)
             end
         end
     end)
@@ -563,7 +550,6 @@ local function LoadCheat()
     local ESPs = {}
     local FlyBV = nil
     local FlyBG = nil
-    local AntiAfkConnection = nil
     
     -- Criar menu
     CreateSection("🎯 AIMBOT", "🎯")
@@ -770,15 +756,6 @@ local function LoadCheat()
         end
     end)
     
-    -- Anti AFK
-    if Settings.AntiAfk then
-        local VirtualUser = game:GetService("VirtualUser")
-        AntiAfkConnection = RunService.Heartbeat:Connect(function()
-            VirtualUser:CaptureController()
-            VirtualUser:ClickButton2(Vector2.new())
-        end)
-    end
-    
     -- Loop principal
     RunService.RenderStepped:Connect(function()
         UpdateESP()
@@ -902,12 +879,17 @@ local function LoadCheat()
     NotifDesc.Parent = Notif
     
     Notif:TweenPosition(UDim2.new(0.5, -175, 0.1, 0), "Out", "Quad", 0.5, true)
-    wait(3)
+    task.wait(3)
     Notif:TweenPosition(UDim2.new(0.5, -175, 0.1, -100), "Out", "Quad", 0.5, true)
-    wait(0.5)
+    task.wait(0.5)
     Notif:Destroy()
     
     print("✅ Practice7 Cheat carregado com sucesso!")
+    print("🎯 Aimbot: K + Botão Direito")
+    print("🚀 Voo: X + WASD + Espaço/Ctrl")
+    print("⚡ Super Velocidade: V")
+    print("👁️ ESP: J")
+    print("📌 Menu: RightControl")
 end
 
 -- ============================================
