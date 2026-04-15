@@ -1,0 +1,21 @@
+{
+  "keys": [
+    {
+      "key": "PRACTICE7-FREE-TRIAL",
+      "user": "Demonstração",
+      "expires": "2025-12-31",
+      "hwid": null
+    },
+    {
+      "key": "NATHAN-2024-001",
+      "user": "Nathan",
+      "expires": "2026-12-31",
+      "hwid": null
+    }
+  ],
+  "settings": {
+    "freeTrial": true,
+    "freeTrialMinutes": 30,
+    "maxRetries": 3
+  }
+}
