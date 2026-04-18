@@ -1,6 +1,6 @@
 --[[
-    PRACTICE7 HUB - VERSÃO FINAL
-    Aimbot Grudento | Voo no Shift Direito | ESP com Cores por Time
+    PRACTICE7 HUB - VERSÃO ORIGINAL
+    Aimbot Original | Voo no Shift Direito | ESP com Cores por Time
     Velocidade do Voo: 300 | Interface Azul Gradiente
 --]]
 
@@ -159,7 +159,7 @@ local function LoadCheat()
         ESP = false,
         Speed = false,
         AntiAfk = false,
-        FlySpeed = 300,  -- Velocidade do voo aumentada para 300
+        FlySpeed = 300,
         WalkSpeed = 55,
         AimbotKey = Enum.KeyCode.K,
         FlyKey = Enum.KeyCode.RightShift,
@@ -168,6 +168,7 @@ local function LoadCheat()
         MenuKey = Enum.KeyCode.RightControl,
         MenuVisible = true,
         AimbotFOV = 800,
+        AimbotPrediction = 0.1,
         TargetPart = "Head",
         ESPTextSize = 14,
         ESPWidth = 180,
@@ -497,8 +498,6 @@ local function LoadCheat()
     local FlyBV = nil
     local FlyBG = nil
     local AntiAfkConnection = nil
-    local currentTarget = nil
-    local currentTargetPlayer = nil
 
     -- FUNÇÃO PARA VERIFICAR SE É DO MESMO TIME
     local function IsSameTeam(player)
@@ -524,10 +523,7 @@ local function LoadCheat()
                 pcall(function() ESPs[player].Gui:Destroy() end)
             end
             
-            -- Verifica se é do mesmo time
             local isTeammate = IsSameTeam(player)
-            
-            -- Define cores baseado no time
             local nameColor = isTeammate and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
             local borderColor = isTeammate and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
             local bgColor = isTeammate and Color3.fromRGB(0, 30, 0) or Color3.fromRGB(30, 0, 0)
@@ -572,13 +568,12 @@ local function LoadCheat()
             infoLabel.TextSize = Settings.ESPTextSize - 2
             infoLabel.Parent = bg
             
-            -- Adiciona indicador de time
             local teamIndicator = Instance.new("TextLabel")
             teamIndicator.Size = UDim2.new(1, 0, 0, 15)
             teamIndicator.Position = UDim2.new(0, 0, 1, -17)
             teamIndicator.BackgroundTransparency = 1
             teamIndicator.Text = isTeammate and "🟢 ALLY" or "🔴 ENEMY"
-            teamIndicator.TextColor3 = isTeammate and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+            teamIndicator.TextColor3 = nameColor
             teamIndicator.Font = Enum.Font.GothamBold
             teamIndicator.TextSize = 10
             teamIndicator.Parent = bg
@@ -601,7 +596,6 @@ local function LoadCheat()
         end)
     end
 
-    -- FUNÇÃO PARA ATUALIZAR CORES DO ESP QUANDO TIME MUDA
     function UpdateESPColors()
         for player, esp in pairs(ESPs) do
             if esp and esp.Gui and esp.Gui.Parent then
@@ -642,75 +636,50 @@ local function LoadCheat()
         end
     end
 
-    -- AIMBOT GRUDENTO
+    -- FUNÇÃO DE AIMBOT ORIGINAL (SEM MODIFICAÇÕES)
     function UpdateAimbot()
-        if not Settings.Aimbot or not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then 
-            currentTarget = nil
-            currentTargetPlayer = nil
-            return 
-        end
+        if not Settings.Aimbot or not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then return end
         
         local closestTarget = nil
-        local closestTargetPlayer = nil
         local closestDist = Settings.AimbotFOV
         local mousePos = Vector2.new(Mouse.X, Mouse.Y)
         
-        -- Se já tem um alvo e ele ainda está vivo, mantém ele
-        if currentTargetPlayer and currentTargetPlayer.Character and currentTargetPlayer.Character:FindFirstChild("Head") then
-            local humanoid = currentTargetPlayer.Character:FindFirstChild("Humanoid")
-            if humanoid and humanoid.Health > 0 then
-                closestTargetPlayer = currentTargetPlayer
+        for _, player in pairs(Players:GetPlayers()) do
+            if player ~= Player and player.Character then
                 local targetPart = nil
                 if Settings.TargetPart == "Head" then
-                    targetPart = currentTargetPlayer.Character:FindFirstChild("Head")
+                    targetPart = player.Character:FindFirstChild("Head")
                 elseif Settings.TargetPart == "Torso" then
-                    targetPart = currentTargetPlayer.Character:FindFirstChild("Torso") or currentTargetPlayer.Character:FindFirstChild("UpperTorso")
+                    targetPart = player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso")
                 else
-                    targetPart = currentTargetPlayer.Character:FindFirstChild("HumanoidRootPart")
+                    targetPart = player.Character:FindFirstChild("HumanoidRootPart")
                 end
-                if targetPart then
-                    closestTarget = targetPart.Position
-                end
-            end
-        end
-        
-        -- Se não tem alvo ou o alvo morreu, procura um novo
-        if not closestTarget then
-            for _, player in pairs(Players:GetPlayers()) do
-                if player ~= Player and player.Character then
-                    local targetPart = nil
-                    if Settings.TargetPart == "Head" then
-                        targetPart = player.Character:FindFirstChild("Head")
-                    elseif Settings.TargetPart == "Torso" then
-                        targetPart = player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso")
-                    else
-                        targetPart = player.Character:FindFirstChild("HumanoidRootPart")
+                
+                local humanoid = player.Character:FindFirstChild("Humanoid")
+                
+                if targetPart and humanoid and humanoid.Health > 0 then
+                    local targetPos = targetPart.Position
+                    
+                    if Settings.AimbotPrediction > 0 then
+                        local velocity = humanoid.MoveDirection * humanoid.WalkSpeed
+                        targetPos = targetPos + (velocity * Settings.AimbotPrediction)
                     end
                     
-                    local humanoid = player.Character:FindFirstChild("Humanoid")
+                    local pos, onScreen = Camera:WorldToViewportPoint(targetPos)
                     
-                    if targetPart and humanoid and humanoid.Health > 0 then
-                        local targetPos = targetPart.Position
-                        local pos, onScreen = Camera:WorldToViewportPoint(targetPos)
+                    if onScreen then
+                        local dist = (Vector2.new(pos.X, pos.Y) - mousePos).Magnitude
                         
-                        if onScreen then
-                            local dist = (Vector2.new(pos.X, pos.Y) - mousePos).Magnitude
-                            
-                            if dist < closestDist then
-                                closestTarget = targetPos
-                                closestTargetPlayer = player
-                                closestDist = dist
-                            end
+                        if dist < closestDist then
+                            closestTarget = targetPos
+                            closestDist = dist
                         end
                     end
                 end
             end
         end
         
-        -- Gruda no alvo
         if closestTarget then
-            currentTarget = closestTarget
-            currentTargetPlayer = closestTargetPlayer
             Camera.CFrame = CFrame.new(Camera.CFrame.Position, closestTarget)
         end
     end
@@ -805,7 +774,6 @@ local function LoadCheat()
         end
     end)
 
-    -- Monitorar mudanças de time
     Player:GetPropertyChangedSignal("Team"):Connect(function()
         UpdateESPColors()
     end)
@@ -815,14 +783,14 @@ local function LoadCheat()
 
     local AimbotBtn = CreateToggle("AIMBOT (TECLA K)", "Ativar mira automática (Botão Direito)", Settings.Aimbot, function(state)
         Settings.Aimbot = state
-        if not state then
-            currentTarget = nil
-            currentTargetPlayer = nil
-        end
     end)
 
     CreateSlider("FOV", 100, 1200, Settings.AimbotFOV, Color3.fromRGB(0, 150, 255), "", function(value)
         Settings.AimbotFOV = value
+    end)
+
+    CreateSlider("PREVISÃO", 0, 0.5, Settings.AimbotPrediction, Color3.fromRGB(0, 200, 255), "", function(value)
+        Settings.AimbotPrediction = value
     end)
 
     CreateDropdown("PARTE", {"Head", "Torso", "Root"}, Settings.TargetPart, function(part)
@@ -942,10 +910,6 @@ local function LoadCheat()
                     powerInd.BackgroundColor3 = Settings.Aimbot and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
                 end
             end
-            if not Settings.Aimbot then
-                currentTarget = nil
-                currentTargetPlayer = nil
-            end
         elseif input.KeyCode == Settings.FlyKey then
             Settings.Fly = not Settings.Fly
             if FlyBtn then
@@ -1018,7 +982,7 @@ local function LoadCheat()
     NotifDesc.Size = UDim2.new(1, 0, 0.4, 0)
     NotifDesc.Position = UDim2.new(0, 0, 0.6, -5)
     NotifDesc.BackgroundTransparency = 1
-    NotifDesc.Text = "🎯 Aimbot Grudento | 🟢 ESP por Time | 🚀 Voo: 300"
+    NotifDesc.Text = "🎯 Aimbot Original | 🟢 ESP por Time | 🚀 Voo: 300"
     NotifDesc.TextColor3 = Color3.fromRGB(0, 150, 255)
     NotifDesc.Font = Enum.Font.GothamBold
     NotifDesc.TextSize = 14
@@ -1031,7 +995,7 @@ local function LoadCheat()
     Notif:Destroy()
 
     print("⚡ Practice7 Perfeito carregado!")
-    print("🎯 Aimbot: K + Botão Direito (GRUDA NO ALVO)")
+    print("🎯 Aimbot: K + Botão Direito (Original)")
     print("🚀 Voo: SHIFT DIREITO + WASD + Espaço/Ctrl (Velocidade 300)")
     print("⚡ Super Velocidade: V")
     print("👁️ ESP: J (🟢 Time | 🔴 Inimigo)")
