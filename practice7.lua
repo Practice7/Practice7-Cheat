@@ -1,7 +1,7 @@
 --[[
     PRACTICE7 HUB - VERSÃO FINAL
-    Aimbot Grudento | Voo no Shift Direito | ESP Ajustável
-    Interface Azul Gradiente
+    Aimbot Grudento | Voo no Shift Direito | ESP com Cores por Time
+    Velocidade do Voo: 300 | Interface Azul Gradiente
 --]]
 
 -- ============================================
@@ -159,10 +159,10 @@ local function LoadCheat()
         ESP = false,
         Speed = false,
         AntiAfk = false,
-        FlySpeed = 75,
+        FlySpeed = 300,  -- Velocidade do voo aumentada para 300
         WalkSpeed = 55,
         AimbotKey = Enum.KeyCode.K,
-        FlyKey = Enum.KeyCode.RightShift,  -- Tecla de voo alterada para SHIFT DIREITO
+        FlyKey = Enum.KeyCode.RightShift,
         SpeedKey = Enum.KeyCode.V,
         ESPKey = Enum.KeyCode.J,
         MenuKey = Enum.KeyCode.RightControl,
@@ -500,7 +500,149 @@ local function LoadCheat()
     local currentTarget = nil
     local currentTargetPlayer = nil
 
-    -- AIMBOT GRUDENTO (NÃO SAI DA MIRA)
+    -- FUNÇÃO PARA VERIFICAR SE É DO MESMO TIME
+    local function IsSameTeam(player)
+        if not Player.Team or not player.Team then
+            return false
+        end
+        return Player.Team == player.Team
+    end
+
+    -- FUNÇÃO DE ESP COM CORES POR TIME
+    function CreateESP(player)
+        if player == Player then return end
+        
+        local function CreateESPForChar()
+            if not player.Character then return end
+            
+            local head = player.Character:FindFirstChild("Head")
+            local humanoid = player.Character:FindFirstChild("Humanoid")
+            
+            if not head or not humanoid then return end
+            
+            if ESPs[player] then
+                pcall(function() ESPs[player].Gui:Destroy() end)
+            end
+            
+            -- Verifica se é do mesmo time
+            local isTeammate = IsSameTeam(player)
+            
+            -- Define cores baseado no time
+            local nameColor = isTeammate and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+            local borderColor = isTeammate and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
+            local bgColor = isTeammate and Color3.fromRGB(0, 30, 0) or Color3.fromRGB(30, 0, 0)
+            
+            local esp = Instance.new("BillboardGui")
+            esp.Name = "ESP_" .. player.Name
+            esp.Size = UDim2.new(0, Settings.ESPWidth, 0, Settings.ESPHeight)
+            esp.StudsOffset = Vector3.new(0, 2, 0)
+            esp.AlwaysOnTop = true
+            esp.Enabled = Settings.ESP
+            esp.Parent = head
+            
+            local bg = Instance.new("Frame")
+            bg.Size = UDim2.new(1, 0, 1, 0)
+            bg.BackgroundColor3 = bgColor
+            bg.BackgroundTransparency = 0.2
+            bg.BorderSizePixel = 1
+            bg.BorderColor3 = borderColor
+            bg.Parent = esp
+            
+            local bgCorner = Instance.new("UICorner")
+            bgCorner.CornerRadius = UDim.new(0, 4)
+            bgCorner.Parent = bg
+            
+            local nameLabel = Instance.new("TextLabel")
+            nameLabel.Size = UDim2.new(1, 0, 0.5, 0)
+            nameLabel.Position = UDim2.new(0, 0, 0, 2)
+            nameLabel.BackgroundTransparency = 1
+            nameLabel.Text = player.Name
+            nameLabel.TextColor3 = nameColor
+            nameLabel.Font = Enum.Font.GothamBold
+            nameLabel.TextSize = Settings.ESPTextSize
+            nameLabel.Parent = bg
+            
+            local infoLabel = Instance.new("TextLabel")
+            infoLabel.Size = UDim2.new(1, 0, 0.5, 0)
+            infoLabel.Position = UDim2.new(0, 0, 0.5, -2)
+            infoLabel.BackgroundTransparency = 1
+            infoLabel.Text = "0m | ❤️ 100"
+            infoLabel.TextColor3 = isTeammate and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 255, 255)
+            infoLabel.Font = Enum.Font.Gotham
+            infoLabel.TextSize = Settings.ESPTextSize - 2
+            infoLabel.Parent = bg
+            
+            -- Adiciona indicador de time
+            local teamIndicator = Instance.new("TextLabel")
+            teamIndicator.Size = UDim2.new(1, 0, 0, 15)
+            teamIndicator.Position = UDim2.new(0, 0, 1, -17)
+            teamIndicator.BackgroundTransparency = 1
+            teamIndicator.Text = isTeammate and "🟢 ALLY" or "🔴 ENEMY"
+            teamIndicator.TextColor3 = isTeammate and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+            teamIndicator.Font = Enum.Font.GothamBold
+            teamIndicator.TextSize = 10
+            teamIndicator.Parent = bg
+            
+            ESPs[player] = {
+                Gui = esp,
+                Head = head,
+                Humanoid = humanoid,
+                InfoLabel = infoLabel,
+                NameLabel = nameLabel,
+                TeamIndicator = teamIndicator
+            }
+        end
+        
+        CreateESPForChar()
+        
+        player.CharacterAdded:Connect(function()
+            task.wait(0.5)
+            CreateESPForChar()
+        end)
+    end
+
+    -- FUNÇÃO PARA ATUALIZAR CORES DO ESP QUANDO TIME MUDA
+    function UpdateESPColors()
+        for player, esp in pairs(ESPs) do
+            if esp and esp.Gui and esp.Gui.Parent then
+                local isTeammate = IsSameTeam(player)
+                local nameColor = isTeammate and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+                local borderColor = isTeammate and Color3.fromRGB(0, 200, 0) or Color3.fromRGB(200, 0, 0)
+                local bgColor = isTeammate and Color3.fromRGB(0, 30, 0) or Color3.fromRGB(30, 0, 0)
+                
+                if esp.Gui and esp.Gui.Parent then
+                    local bg = esp.Gui:FindFirstChildWhichIsA("Frame")
+                    if bg then
+                        bg.BackgroundColor3 = bgColor
+                        bg.BorderColor3 = borderColor
+                    end
+                end
+                
+                if esp.NameLabel then
+                    esp.NameLabel.TextColor3 = nameColor
+                end
+                
+                if esp.TeamIndicator then
+                    esp.TeamIndicator.Text = isTeammate and "🟢 ALLY" or "🔴 ENEMY"
+                    esp.TeamIndicator.TextColor3 = nameColor
+                end
+            end
+        end
+    end
+
+    function RecreateAllESP()
+        for player, esp in pairs(ESPs) do
+            if esp and esp.Gui then
+                pcall(function() esp.Gui:Destroy() end)
+            end
+        end
+        ESPs = {}
+        for _, player in pairs(Players:GetPlayers()) do
+            CreateESP(player)
+        end
+    end
+
+    -- AIMBOT GRUDENTO
     function UpdateAimbot()
         if not Settings.Aimbot or not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then 
             currentTarget = nil
@@ -570,91 +712,6 @@ local function LoadCheat()
             currentTarget = closestTarget
             currentTargetPlayer = closestTargetPlayer
             Camera.CFrame = CFrame.new(Camera.CFrame.Position, closestTarget)
-        end
-    end
-
-    -- FUNÇÃO DE ESP
-    function CreateESP(player)
-        if player == Player then return end
-        
-        local function CreateESPForChar()
-            if not player.Character then return end
-            
-            local head = player.Character:FindFirstChild("Head")
-            local humanoid = player.Character:FindFirstChild("Humanoid")
-            
-            if not head or not humanoid then return end
-            
-            if ESPs[player] then
-                pcall(function() ESPs[player].Gui:Destroy() end)
-            end
-            
-            local esp = Instance.new("BillboardGui")
-            esp.Name = "ESP_" .. player.Name
-            esp.Size = UDim2.new(0, Settings.ESPWidth, 0, Settings.ESPHeight)
-            esp.StudsOffset = Vector3.new(0, 2, 0)
-            esp.AlwaysOnTop = true
-            esp.Enabled = Settings.ESP
-            esp.Parent = head
-            
-            local bg = Instance.new("Frame")
-            bg.Size = UDim2.new(1, 0, 1, 0)
-            bg.BackgroundColor3 = Color3.fromRGB(0, 20, 40)
-            bg.BackgroundTransparency = 0.2
-            bg.BorderSizePixel = 1
-            bg.BorderColor3 = Color3.fromRGB(0, 100, 255)
-            bg.Parent = esp
-            
-            local bgCorner = Instance.new("UICorner")
-            bgCorner.CornerRadius = UDim.new(0, 4)
-            bgCorner.Parent = bg
-            
-            local nameLabel = Instance.new("TextLabel")
-            nameLabel.Size = UDim2.new(1, 0, 0.5, 0)
-            nameLabel.Position = UDim2.new(0, 0, 0, 2)
-            nameLabel.BackgroundTransparency = 1
-            nameLabel.Text = player.Name
-            nameLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
-            nameLabel.Font = Enum.Font.GothamBold
-            nameLabel.TextSize = Settings.ESPTextSize
-            nameLabel.Parent = bg
-            
-            local infoLabel = Instance.new("TextLabel")
-            infoLabel.Size = UDim2.new(1, 0, 0.5, 0)
-            infoLabel.Position = UDim2.new(0, 0, 0.5, -2)
-            infoLabel.BackgroundTransparency = 1
-            infoLabel.Text = "0m | ❤️ 100"
-            infoLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-            infoLabel.Font = Enum.Font.Gotham
-            infoLabel.TextSize = Settings.ESPTextSize - 2
-            infoLabel.Parent = bg
-            
-            ESPs[player] = {
-                Gui = esp,
-                Head = head,
-                Humanoid = humanoid,
-                InfoLabel = infoLabel,
-                NameLabel = nameLabel
-            }
-        end
-        
-        CreateESPForChar()
-        
-        player.CharacterAdded:Connect(function()
-            task.wait(0.5)
-            CreateESPForChar()
-        end)
-    end
-
-    function RecreateAllESP()
-        for player, esp in pairs(ESPs) do
-            if esp and esp.Gui then
-                pcall(function() esp.Gui:Destroy() end)
-            end
-        end
-        ESPs = {}
-        for _, player in pairs(Players:GetPlayers()) do
-            CreateESP(player)
         end
     end
 
@@ -748,6 +805,11 @@ local function LoadCheat()
         end
     end)
 
+    -- Monitorar mudanças de time
+    Player:GetPropertyChangedSignal("Team"):Connect(function()
+        UpdateESPColors()
+    end)
+
     -- CRIAR BOTÕES DO MENU
     CreateSection("🎯 AIMBOT", "🎯")
 
@@ -769,14 +831,14 @@ local function LoadCheat()
 
     CreateSection("🚀 VOO", "🚀")
 
-    local FlyBtn = CreateToggle("VOO (SHIFT DIREITO)", "Voe livremente (WASD + Espaço/Ctrl)", Settings.Fly, function(state)
+    local FlyBtn = CreateToggle("VOO (SHIFT DIREITO)", "Voe livremente (WASD + Espaço/Ctrl) - Velocidade 300", Settings.Fly, function(state)
         Settings.Fly = state
         if not state then
             DisableFly()
         end
     end)
 
-    CreateSlider("VELOCIDADE DO VOO", 30, 200, Settings.FlySpeed, Color3.fromRGB(0, 150, 255), "", function(value)
+    CreateSlider("VELOCIDADE DO VOO", 30, 500, Settings.FlySpeed, Color3.fromRGB(0, 150, 255), "", function(value)
         Settings.FlySpeed = value
     end)
 
@@ -796,7 +858,7 @@ local function LoadCheat()
 
     CreateSection("👁️ ESP", "👁️")
 
-    local ESPBtn = CreateToggle("ESP (TECLA J)", "Mostra jogadores através das paredes", Settings.ESP, function(state)
+    local ESPBtn = CreateToggle("ESP (TECLA J)", "Mostra jogadores através das paredes (🟢 Time | 🔴 Inimigo)", Settings.ESP, function(state)
         Settings.ESP = state
         for _, esp in pairs(ESPs) do
             if esp and esp.Gui then
@@ -956,7 +1018,7 @@ local function LoadCheat()
     NotifDesc.Size = UDim2.new(1, 0, 0.4, 0)
     NotifDesc.Position = UDim2.new(0, 0, 0.6, -5)
     NotifDesc.BackgroundTransparency = 1
-    NotifDesc.Text = "🎯 Aimbot Grudento | 🚀 Voo: Shift Direito"
+    NotifDesc.Text = "🎯 Aimbot Grudento | 🟢 ESP por Time | 🚀 Voo: 300"
     NotifDesc.TextColor3 = Color3.fromRGB(0, 150, 255)
     NotifDesc.Font = Enum.Font.GothamBold
     NotifDesc.TextSize = 14
@@ -970,9 +1032,9 @@ local function LoadCheat()
 
     print("⚡ Practice7 Perfeito carregado!")
     print("🎯 Aimbot: K + Botão Direito (GRUDA NO ALVO)")
-    print("🚀 Voo: SHIFT DIREITO + WASD + Espaço/Ctrl")
+    print("🚀 Voo: SHIFT DIREITO + WASD + Espaço/Ctrl (Velocidade 300)")
     print("⚡ Super Velocidade: V")
-    print("👁️ ESP: J")
+    print("👁️ ESP: J (🟢 Time | 🔴 Inimigo)")
     print("📌 Menu: RightControl")
 end
 
