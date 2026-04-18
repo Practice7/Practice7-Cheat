@@ -1,7 +1,7 @@
 --[[
-    PRACTICE7 HUB - VERSÃO ULTRA
+    PRACTICE7 HUB - VERSÃO CORRIGIDA
     Aimbot Melhorado | Voo Estabilizado | ESP Ajustável
-    Teclas Personalizáveis | Interface Azul Gradiente
+    Teclas Personalizáveis FUNCIONANDO | Interface Azul Gradiente
 --]]
 
 -- ============================================
@@ -53,7 +53,6 @@ local KeyFrameCorner = Instance.new("UICorner")
 KeyFrameCorner.CornerRadius = UDim.new(0, 15)
 KeyFrameCorner.Parent = KeyFrame
 
--- Gradiente azul no título
 local TitleGradient = Instance.new("UIGradient")
 TitleGradient.Color = ColorSequence.new{
     ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 100, 255)),
@@ -155,11 +154,79 @@ local function LoadCheat()
 
     -- Configurações padrão das teclas
     local Keybinds = {
-        Aimbot = Enum.KeyCode.K,
-        Fly = Enum.KeyCode.X,
-        Speed = Enum.KeyCode.V,
-        ESP = Enum.KeyCode.J,
-        Menu = Enum.KeyCode.RightControl
+        Aimbot = "K",
+        Fly = "X",
+        Speed = "V",
+        ESP = "J",
+        Menu = "RightControl"
+    }
+
+    -- Mapeamento de strings para Enum.KeyCode
+    local KeyMap = {
+        ["K"] = Enum.KeyCode.K,
+        ["X"] = Enum.KeyCode.X,
+        ["V"] = Enum.KeyCode.V,
+        ["J"] = Enum.KeyCode.J,
+        ["RightControl"] = Enum.KeyCode.RightControl,
+        ["Q"] = Enum.KeyCode.Q,
+        ["E"] = Enum.KeyCode.E,
+        ["R"] = Enum.KeyCode.R,
+        ["T"] = Enum.KeyCode.T,
+        ["Y"] = Enum.KeyCode.Y,
+        ["U"] = Enum.KeyCode.U,
+        ["I"] = Enum.KeyCode.I,
+        ["O"] = Enum.KeyCode.O,
+        ["P"] = Enum.KeyCode.P,
+        ["F"] = Enum.KeyCode.F,
+        ["G"] = Enum.KeyCode.G,
+        ["H"] = Enum.KeyCode.H,
+        ["Z"] = Enum.KeyCode.Z,
+        ["C"] = Enum.KeyCode.C,
+        ["B"] = Enum.KeyCode.B,
+        ["N"] = Enum.KeyCode.N,
+        ["M"] = Enum.KeyCode.M,
+        ["LeftControl"] = Enum.KeyCode.LeftControl,
+        ["LeftAlt"] = Enum.KeyCode.LeftAlt,
+        ["LeftShift"] = Enum.KeyCode.LeftShift,
+        ["RightShift"] = Enum.KeyCode.RightShift,
+        ["RightAlt"] = Enum.KeyCode.RightAlt,
+        ["CapsLock"] = Enum.KeyCode.CapsLock,
+        ["Tab"] = Enum.KeyCode.Tab,
+        ["Space"] = Enum.KeyCode.Space,
+        ["Enter"] = Enum.KeyCode.Return,
+        ["Backspace"] = Enum.KeyCode.Backspace,
+        ["Delete"] = Enum.KeyCode.Delete,
+        ["Insert"] = Enum.KeyCode.Insert,
+        ["Home"] = Enum.KeyCode.Home,
+        ["End"] = Enum.KeyCode.End,
+        ["PageUp"] = Enum.KeyCode.PageUp,
+        ["PageDown"] = Enum.KeyCode.PageDown,
+        ["Up"] = Enum.KeyCode.Up,
+        ["Down"] = Enum.KeyCode.Down,
+        ["Left"] = Enum.KeyCode.Left,
+        ["Right"] = Enum.KeyCode.Right,
+        ["1"] = Enum.KeyCode.One,
+        ["2"] = Enum.KeyCode.Two,
+        ["3"] = Enum.KeyCode.Three,
+        ["4"] = Enum.KeyCode.Four,
+        ["5"] = Enum.KeyCode.Five,
+        ["6"] = Enum.KeyCode.Six,
+        ["7"] = Enum.KeyCode.Seven,
+        ["8"] = Enum.KeyCode.Eight,
+        ["9"] = Enum.KeyCode.Nine,
+        ["0"] = Enum.KeyCode.Zero,
+        ["F1"] = Enum.KeyCode.F1,
+        ["F2"] = Enum.KeyCode.F2,
+        ["F3"] = Enum.KeyCode.F3,
+        ["F4"] = Enum.KeyCode.F4,
+        ["F5"] = Enum.KeyCode.F5,
+        ["F6"] = Enum.KeyCode.F6,
+        ["F7"] = Enum.KeyCode.F7,
+        ["F8"] = Enum.KeyCode.F8,
+        ["F9"] = Enum.KeyCode.F9,
+        ["F10"] = Enum.KeyCode.F10,
+        ["F11"] = Enum.KeyCode.F11,
+        ["F12"] = Enum.KeyCode.F12,
     }
 
     local Settings = {
@@ -170,11 +237,16 @@ local function LoadCheat()
         AntiAfk = false,
         FlySpeed = 75,
         WalkSpeed = 55,
-        AimbotKey = Keybinds.Aimbot,
-        FlyKey = Keybinds.Fly,
-        SpeedKey = Keybinds.Speed,
-        ESPKey = Keybinds.ESP,
-        MenuKey = Keybinds.Menu,
+        AimbotKey = KeyMap[Keybinds.Aimbot],
+        FlyKey = KeyMap[Keybinds.Fly],
+        SpeedKey = KeyMap[Keybinds.Speed],
+        ESPKey = KeyMap[Keybinds.ESP],
+        MenuKey = KeyMap[Keybinds.Menu],
+        AimbotKeyStr = Keybinds.Aimbot,
+        FlyKeyStr = Keybinds.Fly,
+        SpeedKeyStr = Keybinds.Speed,
+        ESPKeyStr = Keybinds.ESP,
+        MenuKeyStr = Keybinds.Menu,
         MenuVisible = true,
         AimbotFOV = 800,
         AimbotSmoothing = 0.3,
@@ -202,7 +274,6 @@ local function LoadCheat()
     MainFrame.Draggable = true
     MainFrame.Parent = ScreenGui
 
-    -- Gradiente azul no frame principal
     local MainGradient = Instance.new("UIGradient")
     MainGradient.Color = ColorSequence.new{
         ColorSequenceKeypoint.new(0, Color3.fromRGB(0, 40, 80)),
@@ -214,7 +285,6 @@ local function LoadCheat()
     UICorner.CornerRadius = UDim.new(0, 15)
     UICorner.Parent = MainFrame
 
-    -- Borda azul neon
     local Border = Instance.new("Frame")
     Border.Size = UDim2.new(1, 0, 1, 0)
     Border.BackgroundTransparency = 1
@@ -226,7 +296,6 @@ local function LoadCheat()
     BorderCorner.CornerRadius = UDim.new(0, 15)
     BorderCorner.Parent = Border
 
-    -- Título
     local TitleFrame = Instance.new("Frame")
     TitleFrame.Size = UDim2.new(1, 0, 0, 50)
     TitleFrame.BackgroundColor3 = Color3.fromRGB(0, 50, 100)
@@ -246,7 +315,6 @@ local function LoadCheat()
     Title.TextSize = 24
     Title.Parent = TitleFrame
 
-    -- Animação RGB no título
     task.spawn(function()
         while ScreenGui and ScreenGui.Parent do
             for hue = 0, 1, 0.02 do
@@ -371,8 +439,8 @@ local function LoadCheat()
         return Button
     end
 
-    -- Função para criar botão de tecla personalizável
-    function CreateKeybindButton(text, description, currentKey, callback)
+    -- Função para criar botão de tecla personalizável (CORRIGIDA)
+    function CreateKeybindButton(text, description, currentKeyStr, callback)
         local Button = Instance.new("TextButton")
         Button.Size = UDim2.new(0.95, 0, 0, 50)
         Button.BackgroundColor3 = Color3.fromRGB(0, 30, 60)
@@ -409,7 +477,7 @@ local function LoadCheat()
         KeyLabel.Size = UDim2.new(0.25, 0, 0, 30)
         KeyLabel.Position = UDim2.new(0.7, 0, 0.5, -15)
         KeyLabel.BackgroundColor3 = Color3.fromRGB(0, 50, 100)
-        KeyLabel.Text = tostring(currentKey):gsub("Enum.KeyCode.", "")
+        KeyLabel.Text = currentKeyStr
         KeyLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
         KeyLabel.Font = Enum.Font.GothamBold
         KeyLabel.TextSize = 14
@@ -419,29 +487,60 @@ local function LoadCheat()
         KeyCorner.CornerRadius = UDim.new(0, 6)
         KeyCorner.Parent = KeyLabel
         
+        local listening = false
+        
         Button.MouseButton1Click:Connect(function()
+            if listening then return end
+            listening = true
+            
+            local originalText = KeyLabel.Text
             KeyLabel.Text = "..."
             KeyLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
+            KeyLabel.BackgroundColor3 = Color3.fromRGB(100, 50, 0)
             
             local connection
             connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                if not listening then return end
+                
+                -- Ignorar se o jogo processou (ex: chat aberto)
                 if gameProcessed then return end
+                
+                local newKeyName = nil
+                
+                -- Detectar teclas do teclado
                 if input.KeyType == Enum.KeyType.Keyboard then
-                    local newKey = input.KeyCode
-                    if newKey then
-                        KeyLabel.Text = tostring(newKey):gsub("Enum.KeyCode.", "")
+                    local keyCode = input.KeyCode
+                    -- Converter Enum.KeyCode para string legível
+                    local keyStr = tostring(keyCode):gsub("Enum.KeyCode.", "")
+                    newKeyName = keyStr
+                    
+                    -- Mapear para o valor correto
+                    if KeyMap[keyStr] then
+                        callback(keyStr)
+                        KeyLabel.Text = keyStr
                         KeyLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
-                        callback(newKey)
-                        connection:Disconnect()
+                        KeyLabel.BackgroundColor3 = Color3.fromRGB(0, 50, 100)
+                    else
+                        KeyLabel.Text = originalText
+                        KeyLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
+                        KeyLabel.BackgroundColor3 = Color3.fromRGB(0, 50, 100)
                     end
+                    
+                    listening = false
+                    connection:Disconnect()
                 end
             end)
             
+            -- Timeout de 5 segundos
             task.wait(5)
-            if connection and connection.Connected then
-                connection:Disconnect()
-                KeyLabel.Text = tostring(currentKey):gsub("Enum.KeyCode.", "")
+            if listening then
+                listening = false
+                if connection and connection.Connected then
+                    connection:Disconnect()
+                end
+                KeyLabel.Text = originalText
                 KeyLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
+                KeyLabel.BackgroundColor3 = Color3.fromRGB(0, 50, 100)
             end
         end)
         
@@ -590,7 +689,6 @@ local function LoadCheat()
     local FlyBG = nil
     local AntiAfkConnection = nil
     local CurrentTarget = nil
-    local SmoothingStep = 0
 
     -- AIMBOT MELHORADO
     function UpdateAimbot()
@@ -619,7 +717,6 @@ local function LoadCheat()
                 if targetPart and humanoid and humanoid.Health > 0 then
                     local targetPos = targetPart.Position
                     
-                    -- Predição de movimento (melhorada)
                     if Settings.AimbotPrediction > 0 then
                         local velocity = humanoid.MoveDirection * humanoid.WalkSpeed
                         targetPos = targetPos + (velocity * Settings.AimbotPrediction)
@@ -631,7 +728,7 @@ local function LoadCheat()
                         local dist = (Vector2.new(pos.X, pos.Y) - mousePos).Magnitude
                         
                         if dist < closestDist then
-                            closestTarget = {player = player, pos = targetPos, dist = dist}
+                            closestTarget = targetPos
                             closestDist = dist
                         end
                     end
@@ -641,11 +738,9 @@ local function LoadCheat()
         
         if closestTarget then
             CurrentTarget = closestTarget
-            local targetPos = closestTarget.pos
             local currentCF = Camera.CFrame
-            local targetCF = CFrame.new(currentCF.Position, targetPos)
+            local targetCF = CFrame.new(currentCF.Position, closestTarget)
             
-            -- Suavização da mira (smoothing)
             if Settings.AimbotSmoothing > 0 then
                 local lerpFactor = math.clamp(Settings.AimbotSmoothing, 0.1, 0.9)
                 Camera.CFrame = currentCF:Lerp(targetCF, lerpFactor)
@@ -835,24 +930,29 @@ local function LoadCheat()
     -- Seção de Teclas Personalizáveis
     CreateSection("🎮 PERSONALIZAR TECLAS", "🎮")
     
-    local aimbotKeyBtn, aimbotKeyLabel = CreateKeybindButton("TECLA AIMBOT", "Ativa/Desativa o Aimbot", Settings.AimbotKey, function(newKey)
-        Settings.AimbotKey = newKey
+    local aimbotKeyBtn, aimbotKeyLabel = CreateKeybindButton("TECLA AIMBOT", "Ativa/Desativa o Aimbot", Settings.AimbotKeyStr, function(newKey)
+        Settings.AimbotKeyStr = newKey
+        Settings.AimbotKey = KeyMap[newKey]
     end)
     
-    local flyKeyBtn, flyKeyLabel = CreateKeybindButton("TECLA VOO", "Ativa/Desativa o Voo", Settings.FlyKey, function(newKey)
-        Settings.FlyKey = newKey
+    local flyKeyBtn, flyKeyLabel = CreateKeybindButton("TECLA VOO", "Ativa/Desativa o Voo", Settings.FlyKeyStr, function(newKey)
+        Settings.FlyKeyStr = newKey
+        Settings.FlyKey = KeyMap[newKey]
     end)
     
-    local speedKeyBtn, speedKeyLabel = CreateKeybindButton("TECLA VELOCIDADE", "Ativa/Desativa Super Velocidade", Settings.SpeedKey, function(newKey)
-        Settings.SpeedKey = newKey
+    local speedKeyBtn, speedKeyLabel = CreateKeybindButton("TECLA VELOCIDADE", "Ativa/Desativa Super Velocidade", Settings.SpeedKeyStr, function(newKey)
+        Settings.SpeedKeyStr = newKey
+        Settings.SpeedKey = KeyMap[newKey]
     end)
     
-    local espKeyBtn, espKeyLabel = CreateKeybindButton("TECLA ESP", "Ativa/Desativa o ESP", Settings.ESPKey, function(newKey)
-        Settings.ESPKey = newKey
+    local espKeyBtn, espKeyLabel = CreateKeybindButton("TECLA ESP", "Ativa/Desativa o ESP", Settings.ESPKeyStr, function(newKey)
+        Settings.ESPKeyStr = newKey
+        Settings.ESPKey = KeyMap[newKey]
     end)
     
-    local menuKeyBtn, menuKeyLabel = CreateKeybindButton("TECLA MENU", "Abre/Fecha o Menu", Settings.MenuKey, function(newKey)
-        Settings.MenuKey = newKey
+    local menuKeyBtn, menuKeyLabel = CreateKeybindButton("TECLA MENU", "Abre/Fecha o Menu", Settings.MenuKeyStr, function(newKey)
+        Settings.MenuKeyStr = newKey
+        Settings.MenuKey = KeyMap[newKey]
     end)
     
     CreateSection("🎯 AIMBOT", "🎯")
@@ -953,7 +1053,6 @@ local function LoadCheat()
 
     -- LOOP PRINCIPAL
     RunService.RenderStepped:Connect(function()
-        -- Atualizar ESP
         for player, esp in pairs(ESPs) do
             if esp and esp.Gui and esp.Gui.Parent and player.Character then
                 if esp.Head and esp.Head.Parent and esp.Humanoid and esp.Humanoid.Parent then
@@ -986,11 +1085,19 @@ local function LoadCheat()
             Settings.Aimbot = not Settings.Aimbot
             if AimbotBtn then
                 AimbotBtn.BackgroundColor3 = Settings.Aimbot and Color3.fromRGB(0, 50, 100) or Color3.fromRGB(0, 30, 60)
+                local powerInd = AimbotBtn:FindFirstChildWhichIsA("Frame")
+                if powerInd then
+                    powerInd.BackgroundColor3 = Settings.Aimbot and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+                end
             end
         elseif input.KeyCode == Settings.FlyKey then
             Settings.Fly = not Settings.Fly
             if FlyBtn then
                 FlyBtn.BackgroundColor3 = Settings.Fly and Color3.fromRGB(0, 50, 100) or Color3.fromRGB(0, 30, 60)
+                local powerInd = FlyBtn:FindFirstChildWhichIsA("Frame")
+                if powerInd then
+                    powerInd.BackgroundColor3 = Settings.Fly and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+                end
             end
             if not Settings.Fly then
                 DisableFly()
@@ -999,6 +1106,10 @@ local function LoadCheat()
             Settings.Speed = not Settings.Speed
             if SpeedBtn then
                 SpeedBtn.BackgroundColor3 = Settings.Speed and Color3.fromRGB(0, 50, 100) or Color3.fromRGB(0, 30, 60)
+                local powerInd = SpeedBtn:FindFirstChildWhichIsA("Frame")
+                if powerInd then
+                    powerInd.BackgroundColor3 = Settings.Speed and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+                end
             end
             if Player.Character and Player.Character:FindFirstChild("Humanoid") then
                 Player.Character.Humanoid.WalkSpeed = Settings.Speed and Settings.WalkSpeed or 16
@@ -1007,6 +1118,10 @@ local function LoadCheat()
             Settings.ESP = not Settings.ESP
             if ESPBtn then
                 ESPBtn.BackgroundColor3 = Settings.ESP and Color3.fromRGB(0, 50, 100) or Color3.fromRGB(0, 30, 60)
+                local powerInd = ESPBtn:FindFirstChildWhichIsA("Frame")
+                if powerInd then
+                    powerInd.BackgroundColor3 = Settings.ESP and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
+                end
             end
             for _, esp in pairs(ESPs) do
                 if esp and esp.Gui then
@@ -1047,7 +1162,7 @@ local function LoadCheat()
     NotifDesc.Size = UDim2.new(1, 0, 0.4, 0)
     NotifDesc.Position = UDim2.new(0, 0, 0.6, -5)
     NotifDesc.BackgroundTransparency = 1
-    NotifDesc.Text = "🎮 Teclas personalizáveis | Interface Azul"
+    NotifDesc.Text = "🎮 Clique nas teclas para personalizar!"
     NotifDesc.TextColor3 = Color3.fromRGB(0, 150, 255)
     NotifDesc.Font = Enum.Font.GothamBold
     NotifDesc.TextSize = 14
@@ -1060,8 +1175,8 @@ local function LoadCheat()
     Notif:Destroy()
 
     print("⚡ Practice7 Perfeito carregado!")
-    print("🎮 Personalize suas teclas no menu!")
-    print("📌 Menu: " .. tostring(Settings.MenuKey):gsub("Enum.KeyCode.", ""))
+    print("🎮 Clique nos botões das teclas para personalizar!")
+    print("📌 Menu: " .. Settings.MenuKeyStr)
 end
 
 -- ============================================
