@@ -1,7 +1,7 @@
 --[[
-    PRACTICE7 HUB - VERSÃO CORRIGIDA
-    Aimbot Melhorado | Voo Estabilizado | ESP Ajustável
-    Teclas Personalizáveis FUNCIONANDO | Interface Azul Gradiente
+    PRACTICE7 HUB - VERSÃO FINAL
+    Aimbot Grudento | Voo no Shift Direito | ESP Ajustável
+    Interface Azul Gradiente
 --]]
 
 -- ============================================
@@ -152,83 +152,7 @@ local function LoadCheat()
 
     repeat task.wait() until Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
 
-    -- Configurações padrão das teclas
-    local Keybinds = {
-        Aimbot = "K",
-        Fly = "X",
-        Speed = "V",
-        ESP = "J",
-        Menu = "RightControl"
-    }
-
-    -- Mapeamento de strings para Enum.KeyCode
-    local KeyMap = {
-        ["K"] = Enum.KeyCode.K,
-        ["X"] = Enum.KeyCode.X,
-        ["V"] = Enum.KeyCode.V,
-        ["J"] = Enum.KeyCode.J,
-        ["RightControl"] = Enum.KeyCode.RightControl,
-        ["Q"] = Enum.KeyCode.Q,
-        ["E"] = Enum.KeyCode.E,
-        ["R"] = Enum.KeyCode.R,
-        ["T"] = Enum.KeyCode.T,
-        ["Y"] = Enum.KeyCode.Y,
-        ["U"] = Enum.KeyCode.U,
-        ["I"] = Enum.KeyCode.I,
-        ["O"] = Enum.KeyCode.O,
-        ["P"] = Enum.KeyCode.P,
-        ["F"] = Enum.KeyCode.F,
-        ["G"] = Enum.KeyCode.G,
-        ["H"] = Enum.KeyCode.H,
-        ["Z"] = Enum.KeyCode.Z,
-        ["C"] = Enum.KeyCode.C,
-        ["B"] = Enum.KeyCode.B,
-        ["N"] = Enum.KeyCode.N,
-        ["M"] = Enum.KeyCode.M,
-        ["LeftControl"] = Enum.KeyCode.LeftControl,
-        ["LeftAlt"] = Enum.KeyCode.LeftAlt,
-        ["LeftShift"] = Enum.KeyCode.LeftShift,
-        ["RightShift"] = Enum.KeyCode.RightShift,
-        ["RightAlt"] = Enum.KeyCode.RightAlt,
-        ["CapsLock"] = Enum.KeyCode.CapsLock,
-        ["Tab"] = Enum.KeyCode.Tab,
-        ["Space"] = Enum.KeyCode.Space,
-        ["Enter"] = Enum.KeyCode.Return,
-        ["Backspace"] = Enum.KeyCode.Backspace,
-        ["Delete"] = Enum.KeyCode.Delete,
-        ["Insert"] = Enum.KeyCode.Insert,
-        ["Home"] = Enum.KeyCode.Home,
-        ["End"] = Enum.KeyCode.End,
-        ["PageUp"] = Enum.KeyCode.PageUp,
-        ["PageDown"] = Enum.KeyCode.PageDown,
-        ["Up"] = Enum.KeyCode.Up,
-        ["Down"] = Enum.KeyCode.Down,
-        ["Left"] = Enum.KeyCode.Left,
-        ["Right"] = Enum.KeyCode.Right,
-        ["1"] = Enum.KeyCode.One,
-        ["2"] = Enum.KeyCode.Two,
-        ["3"] = Enum.KeyCode.Three,
-        ["4"] = Enum.KeyCode.Four,
-        ["5"] = Enum.KeyCode.Five,
-        ["6"] = Enum.KeyCode.Six,
-        ["7"] = Enum.KeyCode.Seven,
-        ["8"] = Enum.KeyCode.Eight,
-        ["9"] = Enum.KeyCode.Nine,
-        ["0"] = Enum.KeyCode.Zero,
-        ["F1"] = Enum.KeyCode.F1,
-        ["F2"] = Enum.KeyCode.F2,
-        ["F3"] = Enum.KeyCode.F3,
-        ["F4"] = Enum.KeyCode.F4,
-        ["F5"] = Enum.KeyCode.F5,
-        ["F6"] = Enum.KeyCode.F6,
-        ["F7"] = Enum.KeyCode.F7,
-        ["F8"] = Enum.KeyCode.F8,
-        ["F9"] = Enum.KeyCode.F9,
-        ["F10"] = Enum.KeyCode.F10,
-        ["F11"] = Enum.KeyCode.F11,
-        ["F12"] = Enum.KeyCode.F12,
-    }
-
+    -- Configurações
     local Settings = {
         Aimbot = false,
         Fly = false,
@@ -237,20 +161,13 @@ local function LoadCheat()
         AntiAfk = false,
         FlySpeed = 75,
         WalkSpeed = 55,
-        AimbotKey = KeyMap[Keybinds.Aimbot],
-        FlyKey = KeyMap[Keybinds.Fly],
-        SpeedKey = KeyMap[Keybinds.Speed],
-        ESPKey = KeyMap[Keybinds.ESP],
-        MenuKey = KeyMap[Keybinds.Menu],
-        AimbotKeyStr = Keybinds.Aimbot,
-        FlyKeyStr = Keybinds.Fly,
-        SpeedKeyStr = Keybinds.Speed,
-        ESPKeyStr = Keybinds.ESP,
-        MenuKeyStr = Keybinds.Menu,
+        AimbotKey = Enum.KeyCode.K,
+        FlyKey = Enum.KeyCode.RightShift,  -- Tecla de voo alterada para SHIFT DIREITO
+        SpeedKey = Enum.KeyCode.V,
+        ESPKey = Enum.KeyCode.J,
+        MenuKey = Enum.KeyCode.RightControl,
         MenuVisible = true,
         AimbotFOV = 800,
-        AimbotSmoothing = 0.3,
-        AimbotPrediction = 0.15,
         TargetPart = "Head",
         ESPTextSize = 14,
         ESPWidth = 180,
@@ -265,8 +182,8 @@ local function LoadCheat()
     ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
     local MainFrame = Instance.new("Frame")
-    MainFrame.Size = UDim2.new(0, 320, 0, 520)
-    MainFrame.Position = UDim2.new(0.5, -160, 0.5, -260)
+    MainFrame.Size = UDim2.new(0, 320, 0, 450)
+    MainFrame.Position = UDim2.new(0.5, -160, 0.5, -225)
     MainFrame.BackgroundColor3 = Color3.fromRGB(0, 20, 40)
     MainFrame.BackgroundTransparency = 0.05
     MainFrame.BorderSizePixel = 0
@@ -331,7 +248,7 @@ local function LoadCheat()
     Container.BackgroundTransparency = 1
     Container.ScrollBarThickness = 6
     Container.ScrollBarImageColor3 = Color3.fromRGB(0, 150, 255)
-    Container.CanvasSize = UDim2.new(0, 0, 0, 750)
+    Container.CanvasSize = UDim2.new(0, 0, 0, 600)
     Container.AutomaticCanvasSize = Enum.AutomaticSize.Y
     Container.Parent = MainFrame
 
@@ -437,114 +354,6 @@ local function LoadCheat()
         end)
         
         return Button
-    end
-
-    -- Função para criar botão de tecla personalizável (CORRIGIDA)
-    function CreateKeybindButton(text, description, currentKeyStr, callback)
-        local Button = Instance.new("TextButton")
-        Button.Size = UDim2.new(0.95, 0, 0, 50)
-        Button.BackgroundColor3 = Color3.fromRGB(0, 30, 60)
-        Button.BorderSizePixel = 0
-        Button.Parent = Container
-        
-        local BtnCorner = Instance.new("UICorner")
-        BtnCorner.CornerRadius = UDim.new(0, 8)
-        BtnCorner.Parent = Button
-        
-        local BtnTitle = Instance.new("TextLabel")
-        BtnTitle.Size = UDim2.new(0.6, 0, 0, 25)
-        BtnTitle.Position = UDim2.new(0, 10, 0, 5)
-        BtnTitle.BackgroundTransparency = 1
-        BtnTitle.Text = text
-        BtnTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
-        BtnTitle.Font = Enum.Font.GothamBold
-        BtnTitle.TextSize = 14
-        BtnTitle.TextXAlignment = Enum.TextXAlignment.Left
-        BtnTitle.Parent = Button
-        
-        local BtnDesc = Instance.new("TextLabel")
-        BtnDesc.Size = UDim2.new(0.6, 0, 0, 15)
-        BtnDesc.Position = UDim2.new(0, 10, 0, 30)
-        BtnDesc.BackgroundTransparency = 1
-        BtnDesc.Text = description
-        BtnDesc.TextColor3 = Color3.fromRGB(150, 200, 255)
-        BtnDesc.Font = Enum.Font.Gotham
-        BtnDesc.TextSize = 10
-        BtnDesc.TextXAlignment = Enum.TextXAlignment.Left
-        BtnDesc.Parent = Button
-        
-        local KeyLabel = Instance.new("TextLabel")
-        KeyLabel.Size = UDim2.new(0.25, 0, 0, 30)
-        KeyLabel.Position = UDim2.new(0.7, 0, 0.5, -15)
-        KeyLabel.BackgroundColor3 = Color3.fromRGB(0, 50, 100)
-        KeyLabel.Text = currentKeyStr
-        KeyLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
-        KeyLabel.Font = Enum.Font.GothamBold
-        KeyLabel.TextSize = 14
-        KeyLabel.Parent = Button
-        
-        local KeyCorner = Instance.new("UICorner")
-        KeyCorner.CornerRadius = UDim.new(0, 6)
-        KeyCorner.Parent = KeyLabel
-        
-        local listening = false
-        
-        Button.MouseButton1Click:Connect(function()
-            if listening then return end
-            listening = true
-            
-            local originalText = KeyLabel.Text
-            KeyLabel.Text = "..."
-            KeyLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
-            KeyLabel.BackgroundColor3 = Color3.fromRGB(100, 50, 0)
-            
-            local connection
-            connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-                if not listening then return end
-                
-                -- Ignorar se o jogo processou (ex: chat aberto)
-                if gameProcessed then return end
-                
-                local newKeyName = nil
-                
-                -- Detectar teclas do teclado
-                if input.KeyType == Enum.KeyType.Keyboard then
-                    local keyCode = input.KeyCode
-                    -- Converter Enum.KeyCode para string legível
-                    local keyStr = tostring(keyCode):gsub("Enum.KeyCode.", "")
-                    newKeyName = keyStr
-                    
-                    -- Mapear para o valor correto
-                    if KeyMap[keyStr] then
-                        callback(keyStr)
-                        KeyLabel.Text = keyStr
-                        KeyLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
-                        KeyLabel.BackgroundColor3 = Color3.fromRGB(0, 50, 100)
-                    else
-                        KeyLabel.Text = originalText
-                        KeyLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
-                        KeyLabel.BackgroundColor3 = Color3.fromRGB(0, 50, 100)
-                    end
-                    
-                    listening = false
-                    connection:Disconnect()
-                end
-            end)
-            
-            -- Timeout de 5 segundos
-            task.wait(5)
-            if listening then
-                listening = false
-                if connection and connection.Connected then
-                    connection:Disconnect()
-                end
-                KeyLabel.Text = originalText
-                KeyLabel.TextColor3 = Color3.fromRGB(0, 150, 255)
-                KeyLabel.BackgroundColor3 = Color3.fromRGB(0, 50, 100)
-            end
-        end)
-        
-        return Button, KeyLabel
     end
 
     -- Função para criar slider
@@ -688,65 +497,79 @@ local function LoadCheat()
     local FlyBV = nil
     local FlyBG = nil
     local AntiAfkConnection = nil
-    local CurrentTarget = nil
+    local currentTarget = nil
+    local currentTargetPlayer = nil
 
-    -- AIMBOT MELHORADO
+    -- AIMBOT GRUDENTO (NÃO SAI DA MIRA)
     function UpdateAimbot()
         if not Settings.Aimbot or not UserInputService:IsMouseButtonPressed(Enum.UserInputType.MouseButton2) then 
-            CurrentTarget = nil
+            currentTarget = nil
+            currentTargetPlayer = nil
             return 
         end
         
         local closestTarget = nil
+        local closestTargetPlayer = nil
         local closestDist = Settings.AimbotFOV
         local mousePos = Vector2.new(Mouse.X, Mouse.Y)
         
-        for _, player in pairs(Players:GetPlayers()) do
-            if player ~= Player and player.Character then
+        -- Se já tem um alvo e ele ainda está vivo, mantém ele
+        if currentTargetPlayer and currentTargetPlayer.Character and currentTargetPlayer.Character:FindFirstChild("Head") then
+            local humanoid = currentTargetPlayer.Character:FindFirstChild("Humanoid")
+            if humanoid and humanoid.Health > 0 then
+                closestTargetPlayer = currentTargetPlayer
                 local targetPart = nil
                 if Settings.TargetPart == "Head" then
-                    targetPart = player.Character:FindFirstChild("Head")
+                    targetPart = currentTargetPlayer.Character:FindFirstChild("Head")
                 elseif Settings.TargetPart == "Torso" then
-                    targetPart = player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso")
+                    targetPart = currentTargetPlayer.Character:FindFirstChild("Torso") or currentTargetPlayer.Character:FindFirstChild("UpperTorso")
                 else
-                    targetPart = player.Character:FindFirstChild("HumanoidRootPart")
+                    targetPart = currentTargetPlayer.Character:FindFirstChild("HumanoidRootPart")
                 end
-                
-                local humanoid = player.Character:FindFirstChild("Humanoid")
-                
-                if targetPart and humanoid and humanoid.Health > 0 then
-                    local targetPos = targetPart.Position
-                    
-                    if Settings.AimbotPrediction > 0 then
-                        local velocity = humanoid.MoveDirection * humanoid.WalkSpeed
-                        targetPos = targetPos + (velocity * Settings.AimbotPrediction)
+                if targetPart then
+                    closestTarget = targetPart.Position
+                end
+            end
+        end
+        
+        -- Se não tem alvo ou o alvo morreu, procura um novo
+        if not closestTarget then
+            for _, player in pairs(Players:GetPlayers()) do
+                if player ~= Player and player.Character then
+                    local targetPart = nil
+                    if Settings.TargetPart == "Head" then
+                        targetPart = player.Character:FindFirstChild("Head")
+                    elseif Settings.TargetPart == "Torso" then
+                        targetPart = player.Character:FindFirstChild("Torso") or player.Character:FindFirstChild("UpperTorso")
+                    else
+                        targetPart = player.Character:FindFirstChild("HumanoidRootPart")
                     end
                     
-                    local pos, onScreen = Camera:WorldToViewportPoint(targetPos)
+                    local humanoid = player.Character:FindFirstChild("Humanoid")
                     
-                    if onScreen then
-                        local dist = (Vector2.new(pos.X, pos.Y) - mousePos).Magnitude
+                    if targetPart and humanoid and humanoid.Health > 0 then
+                        local targetPos = targetPart.Position
+                        local pos, onScreen = Camera:WorldToViewportPoint(targetPos)
                         
-                        if dist < closestDist then
-                            closestTarget = targetPos
-                            closestDist = dist
+                        if onScreen then
+                            local dist = (Vector2.new(pos.X, pos.Y) - mousePos).Magnitude
+                            
+                            if dist < closestDist then
+                                closestTarget = targetPos
+                                closestTargetPlayer = player
+                                closestDist = dist
+                            end
                         end
                     end
                 end
             end
         end
         
+        -- Gruda no alvo
         if closestTarget then
-            CurrentTarget = closestTarget
-            local currentCF = Camera.CFrame
-            local targetCF = CFrame.new(currentCF.Position, closestTarget)
-            
-            if Settings.AimbotSmoothing > 0 then
-                local lerpFactor = math.clamp(Settings.AimbotSmoothing, 0.1, 0.9)
-                Camera.CFrame = currentCF:Lerp(targetCF, lerpFactor)
-            else
-                Camera.CFrame = targetCF
-            end
+            currentTarget = closestTarget
+            currentTargetPlayer = closestTargetPlayer
+            Camera.CFrame = CFrame.new(Camera.CFrame.Position, closestTarget)
         end
     end
 
@@ -926,51 +749,18 @@ local function LoadCheat()
     end)
 
     -- CRIAR BOTÕES DO MENU
-    
-    -- Seção de Teclas Personalizáveis
-    CreateSection("🎮 PERSONALIZAR TECLAS", "🎮")
-    
-    local aimbotKeyBtn, aimbotKeyLabel = CreateKeybindButton("TECLA AIMBOT", "Ativa/Desativa o Aimbot", Settings.AimbotKeyStr, function(newKey)
-        Settings.AimbotKeyStr = newKey
-        Settings.AimbotKey = KeyMap[newKey]
-    end)
-    
-    local flyKeyBtn, flyKeyLabel = CreateKeybindButton("TECLA VOO", "Ativa/Desativa o Voo", Settings.FlyKeyStr, function(newKey)
-        Settings.FlyKeyStr = newKey
-        Settings.FlyKey = KeyMap[newKey]
-    end)
-    
-    local speedKeyBtn, speedKeyLabel = CreateKeybindButton("TECLA VELOCIDADE", "Ativa/Desativa Super Velocidade", Settings.SpeedKeyStr, function(newKey)
-        Settings.SpeedKeyStr = newKey
-        Settings.SpeedKey = KeyMap[newKey]
-    end)
-    
-    local espKeyBtn, espKeyLabel = CreateKeybindButton("TECLA ESP", "Ativa/Desativa o ESP", Settings.ESPKeyStr, function(newKey)
-        Settings.ESPKeyStr = newKey
-        Settings.ESPKey = KeyMap[newKey]
-    end)
-    
-    local menuKeyBtn, menuKeyLabel = CreateKeybindButton("TECLA MENU", "Abre/Fecha o Menu", Settings.MenuKeyStr, function(newKey)
-        Settings.MenuKeyStr = newKey
-        Settings.MenuKey = KeyMap[newKey]
-    end)
-    
     CreateSection("🎯 AIMBOT", "🎯")
 
-    local AimbotBtn = CreateToggle("AIMBOT", "Ativar mira automática (Botão Direito)", Settings.Aimbot, function(state)
+    local AimbotBtn = CreateToggle("AIMBOT (TECLA K)", "Ativar mira automática (Botão Direito)", Settings.Aimbot, function(state)
         Settings.Aimbot = state
+        if not state then
+            currentTarget = nil
+            currentTargetPlayer = nil
+        end
     end)
 
     CreateSlider("FOV", 100, 1200, Settings.AimbotFOV, Color3.fromRGB(0, 150, 255), "", function(value)
         Settings.AimbotFOV = value
-    end)
-
-    CreateSlider("SUAVIZAÇÃO", 0.1, 0.9, Settings.AimbotSmoothing, Color3.fromRGB(0, 200, 255), "", function(value)
-        Settings.AimbotSmoothing = value
-    end)
-
-    CreateSlider("PREVISÃO", 0, 0.5, Settings.AimbotPrediction, Color3.fromRGB(100, 200, 255), "", function(value)
-        Settings.AimbotPrediction = value
     end)
 
     CreateDropdown("PARTE", {"Head", "Torso", "Root"}, Settings.TargetPart, function(part)
@@ -979,7 +769,7 @@ local function LoadCheat()
 
     CreateSection("🚀 VOO", "🚀")
 
-    local FlyBtn = CreateToggle("VOO", "Voe livremente (WASD + Espaço/Ctrl)", Settings.Fly, function(state)
+    local FlyBtn = CreateToggle("VOO (SHIFT DIREITO)", "Voe livremente (WASD + Espaço/Ctrl)", Settings.Fly, function(state)
         Settings.Fly = state
         if not state then
             DisableFly()
@@ -990,7 +780,7 @@ local function LoadCheat()
         Settings.FlySpeed = value
     end)
 
-    local SpeedBtn = CreateToggle("SUPER VELOCIDADE", "Aumenta velocidade de movimento", Settings.Speed, function(state)
+    local SpeedBtn = CreateToggle("SUPER VELOCIDADE (TECLA V)", "Aumenta velocidade de movimento", Settings.Speed, function(state)
         Settings.Speed = state
         if Player.Character and Player.Character:FindFirstChild("Humanoid") then
             Player.Character.Humanoid.WalkSpeed = state and Settings.WalkSpeed or 16
@@ -1006,7 +796,7 @@ local function LoadCheat()
 
     CreateSection("👁️ ESP", "👁️")
 
-    local ESPBtn = CreateToggle("ESP", "Mostra jogadores através das paredes", Settings.ESP, function(state)
+    local ESPBtn = CreateToggle("ESP (TECLA J)", "Mostra jogadores através das paredes", Settings.ESP, function(state)
         Settings.ESP = state
         for _, esp in pairs(ESPs) do
             if esp and esp.Gui then
@@ -1090,6 +880,10 @@ local function LoadCheat()
                     powerInd.BackgroundColor3 = Settings.Aimbot and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
                 end
             end
+            if not Settings.Aimbot then
+                currentTarget = nil
+                currentTargetPlayer = nil
+            end
         elseif input.KeyCode == Settings.FlyKey then
             Settings.Fly = not Settings.Fly
             if FlyBtn then
@@ -1162,7 +956,7 @@ local function LoadCheat()
     NotifDesc.Size = UDim2.new(1, 0, 0.4, 0)
     NotifDesc.Position = UDim2.new(0, 0, 0.6, -5)
     NotifDesc.BackgroundTransparency = 1
-    NotifDesc.Text = "🎮 Clique nas teclas para personalizar!"
+    NotifDesc.Text = "🎯 Aimbot Grudento | 🚀 Voo: Shift Direito"
     NotifDesc.TextColor3 = Color3.fromRGB(0, 150, 255)
     NotifDesc.Font = Enum.Font.GothamBold
     NotifDesc.TextSize = 14
@@ -1175,8 +969,11 @@ local function LoadCheat()
     Notif:Destroy()
 
     print("⚡ Practice7 Perfeito carregado!")
-    print("🎮 Clique nos botões das teclas para personalizar!")
-    print("📌 Menu: " .. Settings.MenuKeyStr)
+    print("🎯 Aimbot: K + Botão Direito (GRUDA NO ALVO)")
+    print("🚀 Voo: SHIFT DIREITO + WASD + Espaço/Ctrl")
+    print("⚡ Super Velocidade: V")
+    print("👁️ ESP: J")
+    print("📌 Menu: RightControl")
 end
 
 -- ============================================
