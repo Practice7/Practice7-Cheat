@@ -1,8 +1,8 @@
 --[[
-    PRACTICE7 HUB - VERSÃO PERFEITA
+    PRACTICE7 HUB - VERSÃO PERFEITA COM PERSONALIZAÇÃO DE TECLAS
     Aimbot Estável | Voo Estabilizado | ESP Ajustável
     Com Sistema de Key e Verificação
-    Tecla de Velocidade: V | Sistema de Voo Integrado
+    Teclas Personalizáveis: K, X, V, J, RightControl
 --]]
 
 -- ============================================
@@ -152,6 +152,19 @@ local function LoadCheat()
     -- Aguardar caractere
     repeat task.wait() until Player.Character and Player.Character:FindFirstChild("HumanoidRootPart")
 
+    -- Configurações padrão das teclas
+    local Keybinds = {
+        Aimbot = Enum.KeyCode.K,
+        Fly = Enum.KeyCode.X,
+        Speed = Enum.KeyCode.V,
+        ESP = Enum.KeyCode.J,
+        Menu = Enum.KeyCode.RightControl
+    }
+    
+    -- Variáveis para aguardar nova tecla
+    local waitingForKey = nil
+    local waitingForCallback = nil
+
     -- Configurações
     local Settings = {
         Aimbot = false,
@@ -161,11 +174,11 @@ local function LoadCheat()
         AntiAfk = false,
         FlySpeed = 75,
         WalkSpeed = 55,
-        AimbotKey = Enum.KeyCode.K,
-        FlyKey = Enum.KeyCode.X,
-        SpeedKey = Enum.KeyCode.V,
-        ESPKey = Enum.KeyCode.J,
-        MenuKey = Enum.KeyCode.RightControl,
+        AimbotKey = Keybinds.Aimbot,
+        FlyKey = Keybinds.Fly,
+        SpeedKey = Keybinds.Speed,
+        ESPKey = Keybinds.ESP,
+        MenuKey = Keybinds.Menu,
         MenuVisible = true,
         AimbotFOV = 800,
         AimbotStrength = 1.0,
@@ -185,8 +198,8 @@ local function LoadCheat()
 
     -- Frame principal
     local MainFrame = Instance.new("Frame")
-    MainFrame.Size = UDim2.new(0, 320, 0, 400)
-    MainFrame.Position = UDim2.new(0.5, -160, 0.5, -200)
+    MainFrame.Size = UDim2.new(0, 320, 0, 480)
+    MainFrame.Position = UDim2.new(0.5, -160, 0.5, -240)
     MainFrame.BackgroundColor3 = Color3.fromRGB(10, 0, 0)
     MainFrame.BackgroundTransparency = 0.05
     MainFrame.BorderSizePixel = 0
@@ -236,7 +249,7 @@ local function LoadCheat()
     Container.BackgroundTransparency = 1
     Container.ScrollBarThickness = 6
     Container.ScrollBarImageColor3 = Color3.fromRGB(255, 0, 0)
-    Container.CanvasSize = UDim2.new(0, 0, 0, 500)
+    Container.CanvasSize = UDim2.new(0, 0, 0, 700)
     Container.AutomaticCanvasSize = Enum.AutomaticSize.Y
     Container.Parent = MainFrame
 
@@ -342,6 +355,83 @@ local function LoadCheat()
         end)
         
         return Button
+    end
+
+    -- Função para criar botão de tecla personalizável
+    function CreateKeybindButton(text, description, currentKey, callback)
+        local Button = Instance.new("TextButton")
+        Button.Size = UDim2.new(0.95, 0, 0, 50)
+        Button.BackgroundColor3 = Color3.fromRGB(20, 0, 0)
+        Button.BorderSizePixel = 0
+        Button.Parent = Container
+        
+        local BtnCorner = Instance.new("UICorner")
+        BtnCorner.CornerRadius = UDim.new(0, 8)
+        BtnCorner.Parent = Button
+        
+        local BtnTitle = Instance.new("TextLabel")
+        BtnTitle.Size = UDim2.new(0.6, 0, 0, 25)
+        BtnTitle.Position = UDim2.new(0, 10, 0, 5)
+        BtnTitle.BackgroundTransparency = 1
+        BtnTitle.Text = text
+        BtnTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+        BtnTitle.Font = Enum.Font.GothamBold
+        BtnTitle.TextSize = 14
+        BtnTitle.TextXAlignment = Enum.TextXAlignment.Left
+        BtnTitle.Parent = Button
+        
+        local BtnDesc = Instance.new("TextLabel")
+        BtnDesc.Size = UDim2.new(0.6, 0, 0, 15)
+        BtnDesc.Position = UDim2.new(0, 10, 0, 30)
+        BtnDesc.BackgroundTransparency = 1
+        BtnDesc.Text = description
+        BtnDesc.TextColor3 = Color3.fromRGB(200, 200, 200)
+        BtnDesc.Font = Enum.Font.Gotham
+        BtnDesc.TextSize = 10
+        BtnDesc.TextXAlignment = Enum.TextXAlignment.Left
+        BtnDesc.Parent = Button
+        
+        local KeyLabel = Instance.new("TextLabel")
+        KeyLabel.Size = UDim2.new(0.3, 0, 0, 30)
+        KeyLabel.Position = UDim2.new(0.65, 0, 0.5, -15)
+        KeyLabel.BackgroundColor3 = Color3.fromRGB(40, 0, 0)
+        KeyLabel.Text = tostring(currentKey):gsub("Enum.KeyCode.", "")
+        KeyLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+        KeyLabel.Font = Enum.Font.GothamBold
+        KeyLabel.TextSize = 14
+        KeyLabel.Parent = Button
+        
+        local KeyCorner = Instance.new("UICorner")
+        KeyCorner.CornerRadius = UDim.new(0, 6)
+        KeyCorner.Parent = KeyLabel
+        
+        Button.MouseButton1Click:Connect(function()
+            KeyLabel.Text = "..."
+            KeyLabel.TextColor3 = Color3.fromRGB(255, 255, 0)
+            
+            local connection
+            connection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+                if gameProcessed then return end
+                if input.KeyType == Enum.KeyType.Keyboard then
+                    local newKey = input.KeyCode
+                    if newKey then
+                        KeyLabel.Text = tostring(newKey):gsub("Enum.KeyCode.", "")
+                        KeyLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+                        callback(newKey)
+                        connection:Disconnect()
+                    end
+                end
+            end)
+            
+            task.wait(5)
+            if connection and connection.Connected then
+                connection:Disconnect()
+                KeyLabel.Text = tostring(currentKey):gsub("Enum.KeyCode.", "")
+                KeyLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+            end
+        end)
+        
+        return Button, KeyLabel
     end
 
     -- Função para criar slider
@@ -715,6 +805,30 @@ local function LoadCheat()
     end)
 
     -- CRIAR BOTÕES DO MENU
+    
+    -- Seção de Teclas Personalizáveis
+    CreateSection("🎮 PERSONALIZAR TECLAS", "🎮")
+    
+    local aimbotKeyBtn, aimbotKeyLabel = CreateKeybindButton("TECLA AIMBOT", "Ativa/Desativa o Aimbot", Settings.AimbotKey, function(newKey)
+        Settings.AimbotKey = newKey
+    end)
+    
+    local flyKeyBtn, flyKeyLabel = CreateKeybindButton("TECLA VOO", "Ativa/Desativa o Voo", Settings.FlyKey, function(newKey)
+        Settings.FlyKey = newKey
+    end)
+    
+    local speedKeyBtn, speedKeyLabel = CreateKeybindButton("TECLA VELOCIDADE", "Ativa/Desativa Super Velocidade", Settings.SpeedKey, function(newKey)
+        Settings.SpeedKey = newKey
+    end)
+    
+    local espKeyBtn, espKeyLabel = CreateKeybindButton("TECLA ESP", "Ativa/Desativa o ESP", Settings.ESPKey, function(newKey)
+        Settings.ESPKey = newKey
+    end)
+    
+    local menuKeyBtn, menuKeyLabel = CreateKeybindButton("TECLA MENU", "Abre/Fecha o Menu", Settings.MenuKey, function(newKey)
+        Settings.MenuKey = newKey
+    end)
+    
     CreateSection("🎯 AIMBOT", "🎯")
 
     local AimbotBtn = CreateToggle("AIMBOT", "Ativar mira automática (Botão Direito)", Settings.Aimbot, function(state)
@@ -735,7 +849,7 @@ local function LoadCheat()
 
     CreateSection("🚀 VOO", "🚀")
 
-    local FlyBtn = CreateToggle("VOO (TECLA X)", "Voe livremente (WASD + Espaço/Ctrl) - Sistema otimizado", Settings.Fly, function(state)
+    local FlyBtn = CreateToggle("VOO", "Voe livremente (WASD + Espaço/Ctrl)", Settings.Fly, function(state)
         Settings.Fly = state
         if not state then
             DisableFly()
@@ -746,7 +860,7 @@ local function LoadCheat()
         Settings.FlySpeed = value
     end)
 
-    local SpeedBtn = CreateToggle("SUPER VELOCIDADE (TECLA V)", "Aumenta velocidade de movimento", Settings.Speed, function(state)
+    local SpeedBtn = CreateToggle("SUPER VELOCIDADE", "Aumenta velocidade de movimento", Settings.Speed, function(state)
         Settings.Speed = state
         if Player.Character and Player.Character:FindFirstChild("Humanoid") then
             Player.Character.Humanoid.WalkSpeed = state and Settings.WalkSpeed or 16
@@ -762,7 +876,7 @@ local function LoadCheat()
 
     CreateSection("👁️ ESP", "👁️")
 
-    local ESPBtn = CreateToggle("ESP (TECLA J)", "Mostra jogadores através das paredes", Settings.ESP, function(state)
+    local ESPBtn = CreateToggle("ESP", "Mostra jogadores através das paredes", Settings.ESP, function(state)
         Settings.ESP = state
         for _, esp in pairs(ESPs) do
             if esp and esp.Gui then
@@ -923,7 +1037,7 @@ local function LoadCheat()
     NotifDesc.Size = UDim2.new(1, 0, 0.4, 0)
     NotifDesc.Position = UDim2.new(0, 0, 0.6, -5)
     NotifDesc.BackgroundTransparency = 1
-    NotifDesc.Text = "🎯 K | 🚀 X | ⚡ V | 👁️ J | RightControl"
+    NotifDesc.Text = "🎮 Teclas personalizáveis no menu!"
     NotifDesc.TextColor3 = Color3.fromRGB(255, 0, 0)
     NotifDesc.Font = Enum.Font.GothamBold
     NotifDesc.TextSize = 14
@@ -936,11 +1050,8 @@ local function LoadCheat()
     Notif:Destroy()
 
     print("⚡ Practice7 Perfeito carregado!")
-    print("🎯 Aimbot: K + Botão Direito")
-    print("🚀 Voo: X + WASD + Espaço/Ctrl")
-    print("⚡ Super Velocidade: V")
-    print("👁️ ESP: J")
-    print("📌 Menu: RightControl")
+    print("🎮 Personalize suas teclas no menu!")
+    print("📌 Menu: " .. tostring(Settings.MenuKey):gsub("Enum.KeyCode.", ""))
 end
 
 -- ============================================
